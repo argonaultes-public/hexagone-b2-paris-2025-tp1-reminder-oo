@@ -1,5 +1,5 @@
 import random
-
+from abc import ABC, abstractmethod
 
 class Probe:
 
@@ -12,30 +12,35 @@ class Probe:
     def get_pressure(self):
         return random.randint(700, 1200)
 
-class CurrentWeatherDisp:
+class Display(ABC):
 
-    def update_weather_disp(self, temperature, humidity, pressure):
+    @abstractmethod
+    def update_display(self, temperature, humidity, pressure):
+        pass
+
+class CurrentWeatherDisp(Display):
+
+    def update_display(self, temperature, humidity, pressure):
         print(f'{temperature} °C {humidity} % {pressure} hPa update current weather display')
 
-class ForecastWeatherDisp:
+class ForecastWeatherDisp(Display):
 
-    def update_forecast_disp(self, temperature, humidity, pressure):
+    def update_display(self, temperature, humidity, pressure):
         print(f'{temperature} °C {humidity} % {pressure} hPa update forecast for ...')
 
-class StatsDisp:
+class StatsDisp(Display):
 
-    def update_stats_disp(self, temperature, humidity, pressure):
+    def update_display(self, temperature, humidity, pressure):
         print(f'{temperature} °C {humidity} % {pressure} hPa stats display')
 
 
 class WeatherStation:
 
-    def __init__(self, probe: Probe, current_weather, forecast_weather, stats_weather):
+    def __init__(self, probe: Probe, current_weather : Display, forecast_weather : Display, stats_weather : Display):
         self.__probe = probe
         self.__current_weather = current_weather
         self.__forecast_weather = forecast_weather
         self.__stats_weather = stats_weather
-
 
     def measurements_changed(self):
         # get measurements from probe
@@ -43,9 +48,10 @@ class WeatherStation:
         humidity = self.__probe.get_humidity()
         pressure = self.__probe.get_pressure()
 
-        self.__current_weather.update_weather_disp(temperature, humidity, pressure)
-        self.__forecast_weather.update_forecast_disp(temperature, humidity, pressure)
-        self.__stats_weather.update_stats_disp(temperature, humidity, pressure)
+        self.__current_weather.update_display(temperature, humidity, pressure)
+        self.__forecast_weather.update_display(temperature, humidity, pressure)
+        self.__stats_weather.update_display(temperature, humidity, pressure)
+
 
 if __name__ == '__main__':
     weather_station = WeatherStation(Probe(), CurrentWeatherDisp(), ForecastWeatherDisp(), StatsDisp())
