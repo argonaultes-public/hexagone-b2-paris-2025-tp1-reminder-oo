@@ -14,18 +14,18 @@ class Probe:
 
 class CurrentWeatherDisp:
 
-    def update_weather_disp(temperature, humidity, pressure):
-        print('update current weather display')
+    def update_weather_disp(self, temperature, humidity, pressure):
+        print(f'{temperature} °C {humidity} % {pressure} hPa update current weather display')
 
 class ForecastWeatherDisp:
 
-    def update_forecast_disp(temperature, humidity, pressure):
-        print('update forecast for ...')
+    def update_forecast_disp(self, temperature, humidity, pressure):
+        print(f'{temperature} °C {humidity} % {pressure} hPa update forecast for ...')
 
 class StatsDisp:
 
-    def update_stats_disp(temperature, humidity, pressure):
-        print('stats display')
+    def update_stats_disp(self, temperature, humidity, pressure):
+        print(f'{temperature} °C {humidity} % {pressure} hPa stats display')
 
 
 class WeatherStation:
@@ -34,8 +34,19 @@ class WeatherStation:
         self.__probe = probe
         self.__current_weather = current_weather
         self.__forecast_weather = forecast_weather
-        self.__sats_weather = stats_weather
+        self.__stats_weather = stats_weather
 
-    #TODO
+
     def measurements_changed(self):
-        pass
+        # get measurements from probe
+        temperature = self.__probe.get_temperature()
+        humidity = self.__probe.get_humidity()
+        pressure = self.__probe.get_pressure()
+
+        self.__current_weather.update_weather_disp(temperature, humidity, pressure)
+        self.__forecast_weather.update_forecast_disp(temperature, humidity, pressure)
+        self.__stats_weather.update_stats_disp(temperature, humidity, pressure)
+
+if __name__ == '__main__':
+    weather_station = WeatherStation(Probe(), CurrentWeatherDisp(), ForecastWeatherDisp(), StatsDisp())
+    weather_station.measurements_changed()
