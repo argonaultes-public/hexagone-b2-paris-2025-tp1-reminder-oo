@@ -23,7 +23,7 @@ class PersonJson(PersonStorage):
 
 class PersonXML(PersonStorage):
     def save(self, person):
-        pass
+        print(f'Save the {person} to a XML file')
 
 
 if __name__ == '__main__':
