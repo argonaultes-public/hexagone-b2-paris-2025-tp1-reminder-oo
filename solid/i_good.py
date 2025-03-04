@@ -5,12 +5,12 @@ class Vehicle(ABC):
     def go(self):
         pass
 
-class Flying(ABC):
+class Flying(Vehicle):
     @abstractmethod
     def fly(self):
         pass
 
-class Aircraft(Vehicle, Flying):
+class Aircraft(Flying):
     def go(self):
         print("Taxiing")
 
