@@ -1,41 +1,74 @@
 from abc import ABC, abstractmethod
 
+
+class Fly(ABC):
+
+    @abstractmethod
+    def fly(self):
+        pass
+
+class FlyWell(Fly):
+
+    def fly(self):
+        print(f'... is flying well!')
+
+class FlyNone(Fly):
+
+    def fly(self):
+        print('Cannot fly')
+
+class Quack(ABC):
+
+    @abstractmethod
+    def quack(self):
+        pass
+
+class QuackQuack(Quack):
+
+    def quack(self):
+        print('quack quack!')
+
+class QuackCoin(Quack):
+
+    def quack(self):
+        print('coin coin!')
+
+class QuackSquick(Quack):
+
+    def quack(self):
+        print('squick squick!')
+
 class Duck(ABC):
-    def __init__(self, name):
+    def __init__(self, name, fly: Fly, quack: Quack):
         self.__name = name
+        self.__fly = fly
+        self.__quack = quack
 
     @property
     def name(self):
         return self.__name
 
-    @abstractmethod
     def fly(self):
-        pass
+        self.__fly.fly()
 
-    @abstractmethod
     def quack(self):
-        pass
+        self.__quack.quack()
 
 class NormandyDuck(Duck):
     def __init__(self, name):
-        super().__init__(name)
+        super().__init__(name, FlyWell(), QuackQuack())
 
-    def fly(self):
-        print(f'{self.name} ({self.__class__}) is flying well!')
-
-
-    def quack(self):
-        print(f'{self.name} ({self.__class__}) quack quack!')
 
 class MallardDuck(Duck):
     def __init__(self, name):
-        super().__init__(name)
+        super().__init__(name, FlyWell(), QuackCoin())
 
-    def fly(self):
-        print(f'{self.name} ({self.__class__}) is flying well!')
 
-    def quack(self):
-        print(f'{self.name} ({self.__class__}) coin coin!')
+class RubberDuck(Duck):
+    def __init__(self, name):
+        super().__init__(name, FlyNone(), QuackSquick())
+
+
 
 if __name__ == '__main__':
     duck1 = NormandyDuck('donald')
