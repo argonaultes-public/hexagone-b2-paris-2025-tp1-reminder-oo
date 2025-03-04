@@ -48,6 +48,9 @@ class Duck(ABC):
     def name(self):
         return self.__name
 
+    def set_fly(self, fly: Fly):
+        self.__fly = fly
+
     def fly(self):
         self.__fly.fly()
 
@@ -77,3 +80,7 @@ if __name__ == '__main__':
     picsou = MallardDuck('picsou')
     picsou.fly()
     picsou.quack()
+    yellow = RubberDuck('yellow')
+    yellow.fly()
+    yellow.set_fly(FlyWell())
+    yellow.fly() # flying well....
