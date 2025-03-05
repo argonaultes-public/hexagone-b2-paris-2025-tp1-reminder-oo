@@ -36,11 +36,15 @@ class StatsDisp(Display):
 
 class WeatherStation:
 
-    def __init__(self, probe: Probe, current_weather : Display, forecast_weather : Display, stats_weather : Display):
+    def __init__(self, probe: Probe):
         self.__probe = probe
-        self.__current_weather = current_weather
-        self.__forecast_weather = forecast_weather
-        self.__stats_weather = stats_weather
+        self.__displays = []
+
+    def add_display(self, display: Display):
+        self.__displays.append(display)
+
+    def get_display(self):
+        return self.__displays
 
     def measurements_changed(self):
         # get measurements from probe
@@ -48,11 +52,15 @@ class WeatherStation:
         humidity = self.__probe.get_humidity()
         pressure = self.__probe.get_pressure()
 
-        self.__current_weather.update_display(temperature, humidity, pressure)
-        self.__forecast_weather.update_display(temperature, humidity, pressure)
-        self.__stats_weather.update_display(temperature, humidity, pressure)
+        for display in self.get_display():
+            display.update_display(temperature, humidity, pressure)
 
 
 if __name__ == '__main__':
-    weather_station = WeatherStation(Probe(), CurrentWeatherDisp(), ForecastWeatherDisp(), StatsDisp())
+    weather_station = WeatherStation(Probe())
+    weather_station.add_display(CurrentWeatherDisp())    
+    weather_station.add_display(ForecastWeatherDisp())
+    weather_station.add_display(StatsDisp())
+    weather_station.measurements_changed()
+    weather_station.add_display(StatsDisp())
     weather_station.measurements_changed()
